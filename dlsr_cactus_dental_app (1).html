@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cactus Buddy - DLSR Pediatric Dental Distraction</title>
+  <style>
+    :root {
+      --bg-primary: #E8F8F5;
+      --bg-card: #FFFFFF;
+      --accent-green: #2ECC71;
+      --cactus-green: #27AE60;
+      --cactus-dark: #1E8449;
+      --accent-yellow: #F1C40F;
+      --accent-pink: #FF7675;
+      --accent-blue: #74B9FF;
+      --text-main: #2D3436;
+      --text-muted: #636E72;
+      --shadow: 0 8px 24px rgba(46, 204, 113, 0.15);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #E8F8F5 0%, #D5F5E3 50%, #FCF3CF 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      margin-bottom: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      font-size: 28px;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--cactus-dark);
+      line-height: 1.1;
+    }
+
+    .brand-text span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: #F1F2F6;
+      border: none;
+      outline: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .btn-icon:hover, .btn-icon:active {
+      transform: scale(1.08);
+      background: #E4E7EB;
+    }
+
+    /* Main Container */
+    main {
+      width: 100%;
+      max-width: 520px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Cactus Stage */
+    .stage {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 10px 0;
+    }
+
+    .speech-bubble {
+      position: absolute;
+      top: 0;
+      background: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      border: 3px solid var(--accent-yellow);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      max-width: 280px;
+      text-align: center;
+      z-index: 10;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 12px 10px 0;
+      border-style: solid;
+      border-color: white transparent;
+      display: block;
+      width: 0;
+    }
+
+    /* Interactive Cactus SVG */
+    .cactus-container {
+      width: 240px;
+      height: 300px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .cactus-container:active {
+      transform: scale(0.96);
+    }
+
+    /* Dancing / Speaking Animations */
+    .dancing {
+      animation: cactusDance 0.65s infinite ease-in-out alternate;
+    }
+
+    .listening {
+      animation: cactusListen 1.2s infinite ease-in-out;
+    }
+
+    .breathing-in {
+      animation: cactusInhale 4s ease-in-out forwards;
+    }
+
+    .breathing-out {
+      animation: cactusExhale 4s ease-in-out forwards;
+    }
+
+    @keyframes cactusDance {
+      0% { transform: rotate(-8deg) scale(1) translateY(0); }
+      50% { transform: rotate(0deg) scale(1.04) translateY(-8px); }
+      100% { transform: rotate(8deg) scale(1) translateY(0); }
+    }
+
+    @keyframes cactusListen {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.05) rotate(-3deg); }
+    }
+
+    @keyframes cactusInhale {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.22) translateY(-12px); }
+    }
+
+    @keyframes cactusExhale {
+      0% { transform: scale(1.22) translateY(-12px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 5px rgba(46, 204, 113, 0.4)); }
+      50% { filter: drop-shadow(0 0 18px rgba(46, 204, 113, 0.8)); }
+    }
+
+    /* Status Indicator Badge */
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: white;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      margin-top: 6px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #BDC3C7;
+      transition: background 0.3s ease;
+    }
+
+    .status-badge.listening-mode {
+      border: 2px solid var(--accent-green);
+    }
+    .status-badge.listening-mode .status-dot {
+      background: var(--accent-green);
+      animation: blink 0.9s infinite;
+    }
+
+    .status-badge.talking-mode {
+      border: 2px solid var(--accent-yellow);
+    }
+    .status-badge.talking-mode .status-dot {
+      background: var(--accent-yellow);
+    }
+
+    .status-badge.breathing-mode {
+      border: 2px solid var(--accent-blue);
+    }
+    .status-badge.breathing-mode .status-dot {
+      background: var(--accent-blue);
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Controls Panel */
+    .controls {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .main-action-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      outline: none;
+      border-radius: 20px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+      color: white;
+    }
+
+    .main-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(39, 174, 96, 0.4);
+    }
+
+    .main-action-btn:active {
+      transform: translateY(1px);
+    }
+
+    .main-action-btn.active-mic {
+      background: linear-gradient(135deg, #FF7675 0%, #D63031 100%);
+      box-shadow: 0 8px 20px rgba(214, 48, 49, 0.3);
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .pill-btn {
+      padding: 12px 14px;
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn.active {
+      border-color: var(--cactus-green);
+      background: #E8F8F5;
+      color: var(--cactus-dark);
+      box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+    }
+
+    /* Soundboard Quick Sparks */
+    .soundboard {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px;
+      width: 100%;
+      scrollbar-width: none;
+    }
+    .soundboard::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sound-chip {
+      flex: 1;
+      min-width: 90px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .sound-chip:active {
+      transform: scale(0.92);
+      background: var(--accent-yellow);
+    }
+
+    /* Settings & Clinical Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+      color: var(--cactus-dark);
+      font-weight: 800;
+    }
+
+    .close-btn {
+      background: #F1F2F6;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .setting-item {
+      margin-bottom: 16px;
+    }
+
+    .setting-item label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .setting-item input[type="range"] {
+      width: 100%;
+      accent-color: var(--cactus-green);
+    }
+
+    .setting-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .clinical-callout {
+      background: #E8F8F5;
+      border-left: 4px solid var(--cactus-green);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      margin-top: 14px;
+    }
+
+    .clinical-callout strong {
+      color: var(--cactus-dark);
+    }
+
+    /* Paced Breathing Progress Circle */
+    .breathing-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .breath-indicator {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .breath-timer {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--cactus-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🌵</div>
+      <div class="brand-text">
+        <h1>Cactus Buddy</h1>
+        <span>DLSR Dental Distraction</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="infoBtn" title="DLSR Clinical Guide">ℹ️</button>
+      <button class="btn-icon" id="settingsBtn" title="Clinic Audio Settings">⚙️</button>
+      <button class="btn-icon" id="fullscreenBtn" title="Fullscreen Mode">⛶</button>
+    </div>
+  </header>
+
+  <!-- Interactive Stage Area -->
+  <main>
+    <div class="speech-bubble" id="cactusSpeech">
+      "Hi! Talk to me, and I will dance and talk back!"
+    </div>
+
+    <div class="stage">
+      <!-- Animated SVG Cactus Character -->
+      <div class="cactus-container" id="cactusCharacter">
+        <svg viewBox="0 0 200 250" width="100%" height="100%">
+          <!-- Definitions -->
+          <defs>
+            <linearGradient id="potGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#E17055"/>
+              <stop offset="100%" stop-color="#D63031"/>
+            </linearGradient>
+            <linearGradient id="cactusGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#2ECC71"/>
+              <stop offset="50%" stop-color="#27AE60"/>
+              <stop offset="100%" stop-color="#1E8449"/>
+            </linearGradient>
+            <radialGradient id="flowerGrad">
+              <stop offset="0%" stop-color="#FFEAA7"/>
+              <stop offset="100%" stop-color="#FD79A8"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Flower on Top -->
+          <g id="cactusFlower" transform="translate(100, 28)">
+            <circle cx="0" cy="0" r="10" fill="url(#flowerGrad)"/>
+            <circle cx="-7" cy="-7" r="6" fill="#FF7675"/>
+            <circle cx="7" cy="-7" r="6" fill="#FF7675"/>
+            <circle cx="9" cy="2" r="6" fill="#FF7675"/>
+            <circle cx="-9" cy="2" r="6" fill="#FF7675"/>
+            <circle cx="0" cy="0" r="4" fill="#F1C40F"/>
+          </g>
+
+          <!-- Left Arm -->
+          <path id="leftArm" d="M 68 100 C 35 100, 35 70, 35 60 C 35 55, 48 55, 48 65 C 48 85, 60 88, 70 88" 
+                fill="none" stroke="#27AE60" stroke-width="16" stroke-linecap="round"/>
+
+          <!-- Right Arm -->
+          <path id="rightArm" d="M 132 120 C 165 120, 165 90, 165 80 C 165 75, 152 75, 152 85 C 152 105, 140 108, 130 108" 
+                fill="none" stroke="#27AE60" stroke-width="16" stroke-linecap="round"/>
+
+          <!-- Main Body -->
+          <rect id="cactusBody" x="70" y="32" width="60" height="135" rx="30" fill="url(#cactusGrad)"/>
+
+          <!-- Spines / Needles (Soft friendly yellow nubs) -->
+          <g stroke="#F1C40F" stroke-width="2" stroke-linecap="round">
+            <line x1="72" y1="50" x2="66" y2="48"/>
+            <line x1="128" y1="50" x2="134" y2="48"/>
+            <line x1="72" y1="75" x2="66" y2="73"/>
+            <line x1="128" y1="75" x2="134" y2="73"/>
+            <line x1="72" y1="110" x2="66" y2="108"/>
+            <line x1="128" y1="110" x2="134" y2="108"/>
+            <line x1="72" y1="135" x2="66" y2="133"/>
+            <line x1="128" y1="135" x2="134" y2="133"/>
+          </g>
+
+          <!-- Face Features -->
+          <!-- Eyes -->
+          <g id="cactusEyes">
+            <!-- Left Eye -->
+            <ellipse cx="88" cy="72" rx="7" ry="9" fill="#2D3436"/>
+            <circle cx="86" cy="69" r="3" fill="#FFFFFF"/>
+            <!-- Right Eye -->
+            <ellipse cx="112" cy="72" rx="7" ry="9" fill="#2D3436"/>
+            <circle cx="110" cy="69" r="3" fill="#FFFFFF"/>
+          </g>
+
+          <!-- Rosy Cheeks -->
+          <ellipse cx="78" cy="82" rx="5" ry="3.5" fill="#FF7675" opacity="0.7"/>
+          <ellipse cx="122" cy="82" rx="5" ry="3.5" fill="#FF7675" opacity="0.7"/>
+
+          <!-- Mouth -->
+          <path id="cactusMouth" d="M 92 85 Q 100 95 108 85" fill="none" stroke="#2D3436" stroke-width="3.5" stroke-linecap="round"/>
+
+          <!-- Clay Pot Base -->
+          <polygon points="62,165 138,165 128,225 72,225" fill="url(#potGrad)"/>
+          <rect x="58" y="156" width="84" height="12" rx="4" fill="#D63031"/>
+          
+          <!-- Pot Smile / Cute Tooth Graphic -->
+          <circle cx="100" cy="190" r="14" fill="white" opacity="0.9"/>
+          <text x="100" y="196" font-size="16" text-anchor="middle">🦷</text>
+        </svg>
+      </div>
+
+      <!-- Live State Badge -->
+      <div class="status-badge" id="statusBadge">
+        <span class="status-dot"></span>
+        <span id="statusText">Tap 'Start Listening' to play!</span>
+      </div>
+
+      <!-- Breathing Guide Elements -->
+      <div class="breathing-overlay" id="breathingOverlay">
+        <div class="breath-indicator" id="breathIndicator">Breathe In...</div>
+        <div class="breath-timer" id="breathTimer">4</div>
+      </div>
+    </div>
+
+    <!-- Interactive Control Buttons -->
+    <div class="controls">
+      <!-- Main Mic Toggle -->
+      <button class="main-action-btn" id="micBtn">
+        <span id="micIcon">🎙️</span>
+        <span id="micText">Start Listening Loop</span>
+      </button>
+
+      <!-- Mode Selector -->
+      <div class="mode-pills">
+        <button class="pill-btn active" id="loop1Btn">
+          <span>🗣️</span> Loop 1: Talking Mimic
+        </button>
+        <button class="pill-btn" id="loop2Btn">
+          <span>🫁</span> Loop 2: Calm Breath
+        </button>
+      </div>
+
+      <!-- Chairside Quick Soundboard (Tactile Spark for Shy Children) -->
+      <div class="soundboard">
+        <button class="sound-chip" data-sound="giggle">
+          <span>😄</span>
+          <span>Cactus Giggle</span>
+        </button>
+        <button class="sound-chip" data-sound="whistle">
+          <span>💦</span>
+          <span>Water Whistle</span>
+        </button>
+        <button class="sound-chip" data-sound="magic">
+          <span>✨</span>
+          <span>Magic Spark</span>
+        </button>
+        <button class="sound-chip" data-sound="hero">
+          <span>🌟</span>
+          <span>Brave Hero</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Clinical & Info Modal -->
+  <div class="modal-backdrop" id="infoModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>DLSR Dental Protocol</h2>
+        <button class="close-btn" id="closeInfoBtn">&times;</button>
+      </div>
+      <div>
+        <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px;">
+          <strong>Dual Loop Sensory Recalibration (DLSR)</strong> is an active cognitive-sensory distraction protocol developed specifically for young children (ages 3–5) undergoing high-fear dental interventions (such as local anesthetic infiltration).
+        </p>
+
+        <div class="clinical-callout">
+          <strong>Loop 1: Active Mimetic Feedback</strong><br>
+          By recording the child's voice and instantly echoing it with a playful pitch shift (+35%) and dance animation, the child's sensory and cognitive bandwidth is actively occupied. This prevents focus on syringes, needles, and clinic noises.
+        </div>
+
+        <div class="clinical-callout" style="border-left-color: var(--accent-blue); background: #EBF5FB;">
+          <strong>Loop 2: Autonomic Calming Recalibration</strong><br>
+          Clinical thesis data confirms active distraction significantly reduces physiological tachycardia (averaging from ~137 bpm down to ~119 bpm, p &lt; 0.001). The rhythmic 4-4 second paced breathing cycle activates vagal nerve tone, accelerating heart rate recovery.
+        </div>
+
+        <h4 style="margin: 16px 0 8px 0; font-size: 0.95rem;">Chairside Best Practices:</h4>
+        <ul style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6; color: var(--text-muted);">
+          <li>Introduce Cactus Buddy in the waiting area for 2 minutes.</li>
+          <li>Mount tablet on the dental chair light or delivery arm.</li>
+          <li>Activate Loop 1 right as topical gel or local anesthesia is prepared.</li>
+          <li>Transition to Loop 2 (Calm Breath) immediately after needle withdrawal.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Clinic Audio Settings</h2>
+        <button class="close-btn" id="closeSettingsBtn">&times;</button>
+      </div>
+      
+      <div class="setting-item">
+        <label for="pitchSlider">Pitch Shift (Toy Voice): <span id="pitchVal">1.35x</span></label>
+        <input type="range" id="pitchSlider" min="1.1" max="1.7" step="0.05" value="1.35">
+        <div class="setting-desc">Higher pitch sounds more playful and cartoon-like to young children.</div>
+      </div>
+
+      <div class="setting-item">
+        <label for="sensSlider">Noise Gate Threshold: <span id="sensVal">Medium</span></label>
+        <input type="range" id="sensSlider" min="0.01" max="0.08" step="0.005" value="0.035">
+        <div class="setting-desc">Increase if dental suction or compressor hum triggers false recording.</div>
+      </div>
+
+      <div class="setting-item">
+        <label for="silenceSlider">Silence Detection Delay: <span id="silenceVal">700 ms</span></label>
+        <input type="range" id="silenceSlider" min="400" max="1200" step="50" value="700">
+        <div class="setting-desc">How long the child must pause talking before Cactus replies.</div>
+      </div>
+
+      <button class="main-action-btn" id="saveSettingsBtn" style="padding: 10px; font-size: 0.95rem; margin-top: 10px;">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- Audio & Application Logic -->
+  <script>
+    // App State
+    let audioCtx = null;
+    let micStream = null;
+    let isListening = false;
+    let currentMode = 'mimic'; // 'mimic' or 'breath'
+    let pitchMultiplier = 1.35;
+    let noiseGateThreshold = 0.035;
+    let silenceDelay = 700;
+
+    // Recording State
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isSpeaking = false;
+    let silenceTimer = null;
+    let isPlayingBack = false;
+
+    // Breathing Timer State
+    let breathInterval = null;
+    let breathPhase = 'in'; // 'in' or 'out'
+    let breathCount = 4;
+
+    // Elements
+    const micBtn = document.getElementById('micBtn');
+    const micText = document.getElementById('micText');
+    const micIcon = document.getElementById('micIcon');
+    const cactusChar = document.getElementById('cactusCharacter');
+    const speechBubble = document.getElementById('cactusSpeech');
+    const statusBadge = document.getElementById('statusBadge');
+    const statusText = document.getElementById('statusText');
+    const cactusMouth = document.getElementById('cactusMouth');
+    const loop1Btn = document.getElementById('loop1Btn');
+    const loop2Btn = document.getElementById('loop2Btn');
+    const breathingOverlay = document.getElementById('breathingOverlay');
+    const breathIndicator = document.getElementById('breathIndicator');
+    const breathTimer = document.getElementById('breathTimer');
+
+    // Modals
+    const infoModal = document.getElementById('infoModal');
+    const settingsModal = document.getElementById('settingsModal');
+    const infoBtn = document.getElementById('infoBtn');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const closeInfoBtn = document.getElementById('closeInfoBtn');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Settings Sliders
+    const pitchSlider = document.getElementById('pitchSlider');
+    const pitchVal = document.getElementById('pitchVal');
+    const sensSlider = document.getElementById('sensSlider');
+    const sensVal = document.getElementById('sensVal');
+    const silenceSlider = document.getElementById('silenceSlider');
+    const silenceVal = document.getElementById('silenceVal');
+
+    // Initialize Web Audio Context
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Toggle Mic Listening
+    micBtn.addEventListener('click', async () => {
+      initAudio();
+      if (!isListening) {
+        await startMic();
+      } else {
+        stopMic();
+      }
+    });
+
+    async function startMic() {
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        isListening = true;
+        micBtn.classList.add('active-mic');
+        micIcon.textContent = '⏹️';
+        micText.textContent = 'Stop Listening';
+        statusBadge.className = 'status-badge listening-mode';
+        statusText.textContent = 'I am listening! Say something!';
+        speechBubble.textContent = "Listening to you! Say anything!";
+        cactusChar.className = 'cactus-container listening';
+
+        setupAudioProcessing(micStream);
+      } catch (err) {
+        console.warn("Microphone access error:", err);
+        speechBubble.textContent = "Oops! Allow mic access, or tap Cactus / sound buttons!";
+        statusText.textContent = "Mic unavailable - Soundboard active";
+      }
+    }
+
+    function stopMic() {
+      if (micStream) {
+        micStream.getTracks().forEach(track => track.stop());
+        micStream = null;
+      }
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      isListening = false;
+      micBtn.classList.remove('active-mic');
+      micIcon.textContent = '🎙️';
+      micText.textContent = 'Start Listening Loop';
+      statusBadge.className = 'status-badge';
+      statusText.textContent = 'Tap to start!';
+      speechBubble.textContent = "Tap 'Start' or tap me to play!";
+      cactusChar.className = 'cactus-container';
+      resetMouth();
+    }
+
+    // Setup Voice Activity Detector (VAD) & Recorder
+    function setupAudioProcessing(stream) {
+      const source = audioCtx.createMediaStreamSource(stream);
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 512;
+      source.connect(analyser);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        if (audioChunks.length > 0 && isListening && !isPlayingBack) {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          audioChunks = [];
+          playPitchShiftedEcho(audioBlob);
+        }
+      };
+
+      // VAD Analysis Loop
+      function checkAudio() {
+        if (!isListening || isPlayingBack) {
+          if (isListening) requestAnimationFrame(checkAudio);
+          return;
+        }
+
+        analyser.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          sum += dataArray[i];
+        }
+        let average = sum / bufferLength / 255;
+
+        // Check if child is vocalizing above noise threshold
+        if (average > noiseGateThreshold) {
+          if (!isSpeaking) {
+            isSpeaking = true;
+            statusText.textContent = "I hear you! Keep talking!";
+            statusBadge.className = 'status-badge talking-mode';
+            openMouth();
+            if (mediaRecorder.state === 'inactive') {
+              audioChunks = [];
+              mediaRecorder.start();
+            }
+          }
+          if (silenceTimer) {
+            clearTimeout(silenceTimer);
+            silenceTimer = null;
+          }
+        } else {
+          if (isSpeaking && !silenceTimer) {
+            silenceTimer = setTimeout(() => {
+              isSpeaking = false;
+              resetMouth();
+              if (mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+              }
+            }, silenceDelay);
+          }
+        }
+
+        requestAnimationFrame(checkAudio);
+      }
+
+      checkAudio();
+    }
+
+    // Loop 1: Play Pitch-Shifted Echo & Dance!
+    async function playPitchShiftedEcho(blob) {
+      try {
+        isPlayingBack = true;
+        statusBadge.className = 'status-badge talking-mode';
+        statusText.textContent = "Dancing & talking back! 🎶";
+        speechBubble.textContent = "Hehe! Listen to my funny voice!";
+        cactusChar.className = 'cactus-container dancing';
+
+        const arrayBuffer = await blob.arrayBuffer();
+        const decodedBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        const source = audioCtx.createBufferSource();
+        source.buffer = decodedBuffer;
+        
+        // Squeaky fast toy pitch shift
+        source.playbackRate.value = pitchMultiplier;
+        
+        // Wiggle mouth during playback
+        const mouthInterval = setInterval(() => {
+          if (Math.random() > 0.5) openMouth(); else resetMouth();
+        }, 120);
+
+        source.connect(audioCtx.destination);
+        source.start(0);
+
+        source.onended = () => {
+          clearInterval(mouthInterval);
+          resetMouth();
+          isPlayingBack = false;
+          cactusChar.className = 'cactus-container listening';
+          statusBadge.className = 'status-badge listening-mode';
+          statusText.textContent = "Your turn! Say something!";
+          speechBubble.textContent = "Your turn! What else?";
+        };
+      } catch (err) {
+        console.warn("Playback error:", err);
+        isPlayingBack = false;
+        cactusChar.className = 'cactus-container listening';
+      }
+    }
+
+    function openMouth() {
+      cactusMouth.setAttribute('d', 'M 90 85 Q 100 102 110 85');
+    }
+
+    function resetMouth() {
+      cactusMouth.setAttribute('d', 'M 92 85 Q 100 95 108 85');
+    }
+
+    // Loop 2: Autonomic Calming / Paced Breathing Mode
+    function startBreathingMode() {
+      currentMode = 'breath';
+      loop2Btn.classList.add('active');
+      loop1Btn.classList.remove('active');
+      breathingOverlay.style.display = 'flex';
+      statusBadge.className = 'status-badge breathing-mode';
+      statusText.textContent = "Calm Breathing Loop Active";
+      speechBubble.textContent = "Let's take a calm balloon breath together!";
+
+      breathPhase = 'in';
+      breathCount = 4;
+      breathIndicator.textContent = "Breathe In Slowly... 🫁";
+      breathTimer.textContent = breathCount;
+      cactusChar.className = 'cactus-container breathing-in';
+      playChime(320);
+
+      clearInterval(breathInterval);
+      breathInterval = setInterval(() => {
+        breathCount--;
+        if (breathCount > 0) {
+          breathTimer.textContent = breathCount;
+        } else {
+          // Switch phase
+          if (breathPhase === 'in') {
+            breathPhase = 'out';
+            breathCount = 4;
+            breathIndicator.textContent = "Breathe Out Gently... 🎈";
+            breathTimer.textContent = breathCount;
+            cactusChar.className = 'cactus-container breathing-out';
+            playChime(260);
+          } else {
+            breathPhase = 'in';
+            breathCount = 4;
+            breathIndicator.textContent = "Breathe In Slowly... 🫁";
+            breathTimer.textContent = breathCount;
+            cactusChar.className = 'cactus-container breathing-in';
+            playChime(320);
+          }
+        }
+      }, 1000);
+    }
+
+    function stopBreathingMode() {
+      clearInterval(breathInterval);
+      breathingOverlay.style.display = 'none';
+      cactusChar.className = isListening ? 'cactus-container listening' : 'cactus-container';
+      currentMode = 'mimic';
+      loop1Btn.classList.add('active');
+      loop2Btn.classList.remove('active');
+      statusBadge.className = isListening ? 'status-badge listening-mode' : 'status-badge';
+      statusText.textContent = isListening ? 'Listening!' : 'Ready to play!';
+      speechBubble.textContent = "Good job! You did great!";
+    }
+
+    // Mode Toggle Buttons
+    loop1Btn.addEventListener('click', () => {
+      if (currentMode === 'breath') stopBreathingMode();
+    });
+
+    loop2Btn.addEventListener('click', () => {
+      if (currentMode !== 'breath') startBreathingMode();
+    });
+
+    // Soundboard Synthesizer (Instant engagement for dental assistants/shy kids)
+    function playChime(freq = 440) {
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.2);
+    }
+
+    function playCactusGiggle() {
+      initAudio();
+      cactusChar.className = 'cactus-container dancing';
+      speechBubble.textContent = "Tee-hee-hee! That tickles!";
+      openMouth();
+      [0, 0.1, 0.2, 0.3, 0.4].forEach((t, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(450 + (idx % 2 === 0 ? 120 : 0), audioCtx.currentTime + t);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime + t);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + t + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + t);
+        osc.stop(audioCtx.currentTime + t + 0.08);
+      });
+      setTimeout(() => {
+        resetMouth();
+        cactusChar.className = isListening ? 'cactus-container listening' : 'cactus-container';
+      }, 700);
+    }
+
+    function playWaterWhistle() {
+      initAudio();
+      speechBubble.textContent = "Splish-splash! The water whistle!";
+      cactusChar.className = 'cactus-container dancing';
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+      osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.4);
+      osc.frequency.linearRampToValueAtTime(400, audioCtx.currentTime + 0.8);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.9);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.9);
+      setTimeout(() => {
+        cactusChar.className = isListening ? 'cactus-container listening' : 'cactus-container';
+      }, 950);
+    }
+
+    function playMagicSpark() {
+      initAudio();
+      speechBubble.textContent = "✨ Sparkle power! So brave!";
+      cactusChar.className = 'cactus-container dancing';
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.12);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime + idx * 0.12);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.12 + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + idx * 0.12);
+        osc.stop(audioCtx.currentTime + idx * 0.12 + 0.4);
+      });
+      setTimeout(() => {
+        cactusChar.className = isListening ? 'cactus-container listening' : 'cactus-container';
+      }, 800);
+    }
+
+    function playHeroChime() {
+      initAudio();
+      speechBubble.textContent = "🌟 You are a Dental Super Hero!";
+      cactusChar.className = 'cactus-container dancing';
+      [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.15 + 0.5);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + idx * 0.15);
+        osc.stop(audioCtx.currentTime + idx * 0.15 + 0.5);
+      });
+      setTimeout(() => {
+        cactusChar.className = isListening ? 'cactus-container listening' : 'cactus-container';
+      }, 1000);
+    }
+
+    // Sound chip click handlers
+    document.querySelectorAll('.sound-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sound = btn.dataset.sound;
+        if (sound === 'giggle') playCactusGiggle();
+        else if (sound === 'whistle') playWaterWhistle();
+        else if (sound === 'magic') playMagicSpark();
+        else if (sound === 'hero') playHeroChime();
+      });
+    });
+
+    // Tap Cactus directly
+    cactusChar.addEventListener('click', () => {
+      playCactusGiggle();
+    });
+
+    // Modals
+    infoBtn.addEventListener('click', () => infoModal.style.display = 'flex');
+    closeInfoBtn.addEventListener('click', () => infoModal.style.display = 'none');
+    settingsBtn.addEventListener('click', () => settingsModal.style.display = 'flex');
+    closeSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
+    saveSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
+
+    window.addEventListener('click', (e) => {
+      if (e.target === infoModal) infoModal.style.display = 'none';
+      if (e.target === settingsModal) settingsModal.style.display = 'none';
+    });
+
+    // Settings Sliders Listeners
+    pitchSlider.addEventListener('input', (e) => {
+      pitchMultiplier = parseFloat(e.target.value);
+      pitchVal.textContent = pitchMultiplier.toFixed(2) + 'x';
+    });
+
+    sensSlider.addEventListener('input', (e) => {
+      noiseGateThreshold = parseFloat(e.target.value);
+      if (noiseGateThreshold < 0.025) sensVal.textContent = 'High (Quiet)';
+      else if (noiseGateThreshold > 0.05) sensVal.textContent = 'Low (Noisy Clinic)';
+      else sensVal.textContent = 'Medium';
+    });
+
+    silenceSlider.addEventListener('input', (e) => {
+      silenceDelay = parseInt(e.target.value);
+      silenceVal.textContent = silenceDelay + ' ms';
+    });
+
+    // Fullscreen Mode
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+  </script>
+</body>
+</html>
